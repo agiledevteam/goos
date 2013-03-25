@@ -2,10 +2,10 @@ package com.lge.auctionsniper;
 
 public class AuctionSniper implements AuctionEventListener {
 
-	private final SniperListener sniperListern;
+	private final SniperListener sniperListener;
 
 	public AuctionSniper(SniperListener sniperListener) {
-		this.sniperListern = sniperListener;
+		this.sniperListener = sniperListener;
 	}
 
 	@Override
