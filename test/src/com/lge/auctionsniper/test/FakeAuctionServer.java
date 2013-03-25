@@ -1,7 +1,7 @@
 package com.lge.auctionsniper.test;
 
 import static java.lang.String.format;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.hamcrest.Matcher;
@@ -68,7 +68,7 @@ public class FakeAuctionServer {
 	private void receivesAMessageMatching(String sniperId,
 			Matcher<? super String> messageMatcher) throws InterruptedException {
 		messageListener.receivesAMessage(messageMatcher);
-		assertThat(currentChat.getParticipant(), equalTo(sniperId));
+		assertEquals(idFrom(currentChat.getParticipant()), idFrom(sniperId));
 	}
 
 	public void announceClosed() throws XMPPException {
@@ -77,5 +77,9 @@ public class FakeAuctionServer {
 
 	public void stop() {
 		// connection.disconnect();
+	}
+
+	private String idFrom(String xmppId) {
+		return xmppId.split("@")[0];
 	}
 }
