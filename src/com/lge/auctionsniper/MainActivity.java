@@ -58,25 +58,42 @@ public class MainActivity extends Activity implements SniperListener {
 			String itemId) throws XMPPException {
 		XMPPConnection connection = connectTo(host, username, password);
 		final Chat chat = connection.getChatManager().createChat(
-				auctionId(itemId, connection),
-				new AuctionMessageTranslator(new AuctionSniper(null, this)));
+				auctionId(itemId, connection), null);
 		this.notToBeGCd = chat;
+
+		Auction auction = new Auction() {
+			@Override
+			public void bid(int amount) {
+				try {
+					chat.sendMessage(String.format(BID_COMMAND_FORMAT, amount));
+				} catch (XMPPException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(
+				auction, this)));
 		chat.sendMessage(JOIN_COMMAND_FORMAT);
 	}
 
 	@Override
 	public void sniperLost() {
+		showStatus(R.string.status_lost);
+	}
+	
+	@Override
+	public void sniperBidding() {
+		showStatus(R.string.status_bidding);
+	}
+
+	private void showStatus(final int status) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				TextView textView = (TextView) findViewById(R.id.sniper_status);
-				textView.setText(R.string.status_lost);
+				textView.setText(status);
 			}
 		});
-	}
-
-	@Override
-	public void sniperBidding() {
 	}
 
 	private String auctionId(String itemId, XMPPConnection connection) {
