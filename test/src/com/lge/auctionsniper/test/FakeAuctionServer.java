@@ -49,7 +49,6 @@ public class FakeAuctionServer {
 
 	public void announceClosed() throws XMPPException {
 		currentChat.sendMessage(new Message());
-		Log.d("han", "message sent by fake");
 	}
 
 	public void stop() {
