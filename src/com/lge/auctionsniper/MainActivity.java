@@ -2,10 +2,8 @@ package com.lge.auctionsniper;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.Message;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,8 +15,6 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity implements SniperListener {
 
-	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
-	public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 	private Chat notToBeGCd;
 
 	@Override
@@ -61,19 +57,10 @@ public class MainActivity extends Activity implements SniperListener {
 				auctionId(itemId, connection), null);
 		this.notToBeGCd = chat;
 
-		Auction auction = new Auction() {
-			@Override
-			public void bid(int amount) {
-				try {
-					chat.sendMessage(String.format(BID_COMMAND_FORMAT, amount));
-				} catch (XMPPException e) {
-					e.printStackTrace();
-				}
-			}
-		};
+		Auction auction = new XMPPAuction(chat);
 		chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(
 				auction, this)));
-		chat.sendMessage(JOIN_COMMAND_FORMAT);
+		auction.join();
 	}
 
 	@Override

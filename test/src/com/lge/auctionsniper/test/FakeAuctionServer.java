@@ -12,7 +12,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
-import com.lge.auctionsniper.MainActivity;
+import com.lge.auctionsniper.XMPPAuction;
 
 public class FakeAuctionServer {
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
@@ -56,13 +56,13 @@ public class FakeAuctionServer {
 	public void hasReceivedJoinRequestFrom(String sniperId)
 			throws InterruptedException {
 		receivesAMessageMatching(sniperId,
-				equalTo(MainActivity.JOIN_COMMAND_FORMAT));
+				equalTo(XMPPAuction.JOIN_COMMAND_FORMAT));
 	}
 
 	public void hasReceivedBid(int bid, String sniperId)
 			throws InterruptedException {
 		receivesAMessageMatching(sniperId,
-				equalTo(format(MainActivity.BID_COMMAND_FORMAT, bid)));
+				equalTo(format(XMPPAuction.BID_COMMAND_FORMAT, bid)));
 	}
 
 	private void receivesAMessageMatching(String sniperId,
