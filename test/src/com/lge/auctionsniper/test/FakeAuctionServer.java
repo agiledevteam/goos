@@ -1,7 +1,10 @@
 package com.lge.auctionsniper.test;
 
 import static java.lang.String.format;
+import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.Matchers.equalTo;
 
+import org.hamcrest.Matcher;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -9,7 +12,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
-import android.util.Log;
+import com.lge.auctionsniper.XMPPAuction;
 
 public class FakeAuctionServer {
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
@@ -43,15 +46,40 @@ public class FakeAuctionServer {
 		});
 	}
 
-	public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
-		messageListener.receivesAMessage();
+	public void reportPrice(int price, int increment, String bidder)
+			throws XMPPException {
+		currentChat.sendMessage(String.format("SOLVersion: 1.1; Event: PRICE; "
+				+ "CurrentPrice: %d; Increment: %d; Bidder: %s;", price,
+				increment, bidder));
+	}
+
+	public void hasReceivedJoinRequestFrom(String sniperId)
+			throws InterruptedException {
+		receivesAMessageMatching(sniperId,
+				equalTo(XMPPAuction.JOIN_COMMAND_FORMAT));
+	}
+
+	public void hasReceivedBid(int bid, String sniperId)
+			throws InterruptedException {
+		receivesAMessageMatching(sniperId,
+				equalTo(format(XMPPAuction.BID_COMMAND_FORMAT, bid)));
+	}
+
+	private void receivesAMessageMatching(String sniperId,
+			Matcher<? super String> messageMatcher) throws InterruptedException {
+		messageListener.receivesAMessage(messageMatcher);
+		assertEquals(idFrom(currentChat.getParticipant()), idFrom(sniperId));
 	}
 
 	public void announceClosed() throws XMPPException {
-		currentChat.sendMessage(new Message());
+		currentChat.sendMessage("SOLVersion: 1.1; Event: CLOSE;");
 	}
 
 	public void stop() {
 		// connection.disconnect();
+	}
+
+	private String idFrom(String xmppId) {
+		return xmppId.split("@")[0];
 	}
 }

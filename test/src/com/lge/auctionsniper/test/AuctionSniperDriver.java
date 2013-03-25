@@ -13,7 +13,12 @@ public class AuctionSniperDriver extends AndroidDriver<Activity> {
 		super(solo, timeout);
 	}
 
-	public void showsSniperStatus(String statusText) {
+	public void showsSniperStatus(int resId) {
+		final String statusText = solo.getString(resId);
 		new TextViewDriver(this, R.id.sniper_status).hasText(equalTo(statusText));
+	}
+
+	public void clickJoinButton() {
+		solo.clickOnButton(0);
 	}
 }
