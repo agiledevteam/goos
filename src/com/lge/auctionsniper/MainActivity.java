@@ -15,7 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements AuctionEventListener {
 
 	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
 	public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
@@ -35,7 +35,8 @@ public class MainActivity extends Activity {
 					@Override
 					public void run() {
 						try {
-							joinAuction("localhost", "sniper", "sniper", "item-54321");
+							joinAuction("localhost", "sniper", "sniper",
+									"item-54321");
 						} catch (XMPPException e) {
 							e.printStackTrace();
 						}
@@ -57,19 +58,8 @@ public class MainActivity extends Activity {
 			String itemId) throws XMPPException {
 		XMPPConnection connection = connectTo(host, username, password);
 		final Chat chat = connection.getChatManager().createChat(
-				auctionId(itemId, connection), new MessageListener() {
-
-					@Override
-					public void processMessage(Chat aChat, Message message) {
-						runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								TextView textView = (TextView) findViewById(R.id.sniper_status);
-								textView.setText(R.string.status_lost);
-							}
-						});
-					}
-				});
+				auctionId(itemId, connection),
+				new AuctionMessageTranslator(this));
 		this.notToBeGCd = chat;
 		chat.sendMessage(JOIN_COMMAND_FORMAT);
 	}
@@ -86,6 +76,23 @@ public class MainActivity extends Activity {
 		connection.connect();
 		connection.login(username, password);
 		return connection;
+	}
+
+	@Override
+	public void auctionClosed() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				TextView textView = (TextView) findViewById(R.id.sniper_status);
+				textView.setText(R.string.status_lost);
+			}
+		});
+	}
+
+	@Override
+	public void currentPrice(int price, int increment) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
