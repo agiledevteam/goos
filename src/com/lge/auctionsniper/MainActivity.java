@@ -15,7 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements AuctionEventListener {
+public class MainActivity extends Activity implements SniperListener {
 
 	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
 	public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
@@ -59,7 +59,7 @@ public class MainActivity extends Activity implements AuctionEventListener {
 		XMPPConnection connection = connectTo(host, username, password);
 		final Chat chat = connection.getChatManager().createChat(
 				auctionId(itemId, connection),
-				new AuctionMessageTranslator(this));
+				new AuctionMessageTranslator(new AuctionSniper(this)));
 		this.notToBeGCd = chat;
 		chat.sendMessage(JOIN_COMMAND_FORMAT);
 	}
@@ -79,7 +79,7 @@ public class MainActivity extends Activity implements AuctionEventListener {
 	}
 
 	@Override
-	public void auctionClosed() {
+	public void sniperLost() {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -87,12 +87,6 @@ public class MainActivity extends Activity implements AuctionEventListener {
 				textView.setText(R.string.status_lost);
 			}
 		});
-	}
-
-	@Override
-	public void currentPrice(int price, int increment) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
