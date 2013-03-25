@@ -4,5 +4,6 @@
     <string name="app_name">AuctionSniper</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="status_joining">Joining</string>
 
 </resources>
