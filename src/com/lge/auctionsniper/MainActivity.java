@@ -59,9 +59,24 @@ public class MainActivity extends Activity implements SniperListener {
 		XMPPConnection connection = connectTo(host, username, password);
 		final Chat chat = connection.getChatManager().createChat(
 				auctionId(itemId, connection),
-				new AuctionMessageTranslator(new AuctionSniper(this)));
+				new AuctionMessageTranslator(new AuctionSniper(null, this)));
 		this.notToBeGCd = chat;
 		chat.sendMessage(JOIN_COMMAND_FORMAT);
+	}
+
+	@Override
+	public void sniperLost() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				TextView textView = (TextView) findViewById(R.id.sniper_status);
+				textView.setText(R.string.status_lost);
+			}
+		});
+	}
+
+	@Override
+	public void sniperBidding() {
 	}
 
 	private String auctionId(String itemId, XMPPConnection connection) {
@@ -76,17 +91,6 @@ public class MainActivity extends Activity implements SniperListener {
 		connection.connect();
 		connection.login(username, password);
 		return connection;
-	}
-
-	@Override
-	public void sniperLost() {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				TextView textView = (TextView) findViewById(R.id.sniper_status);
-				textView.setText(R.string.status_lost);
-			}
-		});
 	}
 
 }
