@@ -12,6 +12,7 @@ public class ApplicationRunner {
 
 	public void startBiddingIn(FakeAuctionServer auction, Solo solo) {
 		driver = new AuctionSniperDriver(solo, 1000);
+		driver.clickJoinButton();
 		driver.showsSniperStatus(R.string.status_joining);
 	}
 

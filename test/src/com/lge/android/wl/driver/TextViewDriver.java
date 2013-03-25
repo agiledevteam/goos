@@ -16,12 +16,6 @@ public class TextViewDriver extends ViewDriver<TextView> {
 
 	public void hasText(Matcher<String> equalTo) {
 		has(text(), equalTo);
-//		is(new FeatureMatcher<TextView, String>(equalTo, "has text", "0--") {
-//			@Override
-//			protected String featureValueOf(TextView view) {
-//				return view.getText().toString();
-//			}
-//		});
 	}
 
 	private Query<? super TextView, String> text() {

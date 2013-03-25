@@ -2,7 +2,10 @@
 <resources>
 
     <string name="app_name">AuctionSniper</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="status_joining">Joining</string>
+    <string name="status_lost">Lost</string>
+    <string name="status_bidding">Bidding</string>
+    <string name="join">Join</string>
 
 </resources>
