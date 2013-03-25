@@ -10,8 +10,12 @@ import org.jivesoftware.smack.packet.Message;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
+
+    private Chat notToBeGCd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +34,15 @@ public class MainActivity extends Activity {
 			String itemId) throws XMPPException {
 		XMPPConnection connection;
 		connection = connectTo(host, username, password);
-		Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), new MessageListener() {
+		final Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), new MessageListener() {
 
 			@Override
 			public void processMessage(Chat aChat, Message message) {
-				// TODO Auto-generated method stub
-
+				TextView textView = (TextView) findViewById(R.id.sniper_status);
+				textView.setText(R.string.status_lost);
 			}
 		});
+		this.notToBeGCd = chat;
 		chat.sendMessage(new Message());
 	}
 
