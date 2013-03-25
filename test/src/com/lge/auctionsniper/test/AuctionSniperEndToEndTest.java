@@ -18,7 +18,7 @@ public class AuctionSniperEndToEndTest extends
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		solo = new Solo(getInstrumentation());
+		solo = new Solo(getInstrumentation(), getActivity());
 	}
 
 	public void testSniperJoinsAuctionUntilAuctionCloses() throws Exception {
