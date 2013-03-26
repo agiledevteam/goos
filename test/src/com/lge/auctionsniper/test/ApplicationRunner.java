@@ -27,4 +27,10 @@ public class ApplicationRunner {
 	public void stop() {
 	}
 
+	public void hasShownSniperIsWinning() {
+		driver.showsSniperStatus(R.string.status_winning);
+	}
+	public void showsSniperHasWonAuction() {
+		driver.showsSniperStatus(R.string.status_won);
+	}
 }
