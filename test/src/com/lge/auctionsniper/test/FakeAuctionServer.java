@@ -81,4 +81,8 @@ public class FakeAuctionServer {
 	private String idFrom(String xmppId) {
 		return xmppId.split("@")[0];
 	}
+
+	public String getItemId() {
+		return itemId;
+	}
 }
