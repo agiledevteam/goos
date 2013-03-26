@@ -15,7 +15,8 @@ public class XMPPAuction implements Auction {
 	@Override
 	public void bid(int amount) {
 		try {
-			chat.sendMessage(String.format(XMPPAuction.BID_COMMAND_FORMAT, amount));
+			chat.sendMessage(String.format(XMPPAuction.BID_COMMAND_FORMAT,
+					amount));
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}

@@ -12,20 +12,20 @@ public class AuctionSniper implements AuctionEventListener {
 
 	@Override
 	public void auctionClosed() {
-		if(isWinning)
+		if (isWinning)
 			sniperListener.sniperWon();
 		else
-		sniperListener.sniperLost();
+			sniperListener.sniperLost();
 	}
 
 	@Override
 	public void currentPrice(int price, int increment, PriceSource priceSource) {
 		isWinning = priceSource == PriceSource.FromSniper;
-		if(isWinning){
+		if (isWinning) {
 			sniperListener.sniperWinning();
-		}else{
-		auction.bid(price + increment);
-		sniperListener.sniperBidding();
+		} else {
+			auction.bid(price + increment);
+			sniperListener.sniperBidding();
 		}
 	}
 

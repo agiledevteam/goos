@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity implements SniperListener {
 
-	private static final String SNIPER_ID = "sniper";
 	private Chat notToBeGCd;
 
 	@Override
@@ -32,7 +31,7 @@ public class MainActivity extends Activity implements SniperListener {
 					@Override
 					public void run() {
 						try {
-							joinAuction("localhost", SNIPER_ID, "sniper",
+							joinAuction("localhost", "sniper", "sniper",
 									"item-54321");
 						} catch (XMPPException e) {
 							e.printStackTrace();
@@ -59,21 +58,9 @@ public class MainActivity extends Activity implements SniperListener {
 		this.notToBeGCd = chat;
 
 		Auction auction = new XMPPAuction(chat);
-		chat.addMessageListener(new AuctionMessageTranslator(SNIPER_ID, new AuctionSniper(
-				auction, this)));
+		chat.addMessageListener(new AuctionMessageTranslator(connection
+				.getUser(), new AuctionSniper(auction, this)));
 		auction.join();
-	}
-
-	
-
-	private void showStatus(final int status) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				TextView textView = (TextView) findViewById(R.id.sniper_status);
-				textView.setText(status);
-			}
-		});
 	}
 
 	private String auctionId(String itemId, XMPPConnection connection) {
@@ -94,16 +81,29 @@ public class MainActivity extends Activity implements SniperListener {
 	public void sniperLost() {
 		showStatus(R.string.status_lost);
 	}
+
 	@Override
 	public void sniperBidding() {
 		showStatus(R.string.status_bidding);
 	}
+
 	@Override
 	public void sniperWinning() {
 		showStatus(R.string.status_winning);
 	}
+
 	@Override
 	public void sniperWon() {
-		showStatus(R.string.status_won);		
+		showStatus(R.string.status_won);
+	}
+
+	private void showStatus(final int status) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				TextView textView = (TextView) findViewById(R.id.sniper_status);
+				textView.setText(status);
+			}
+		});
 	}
 }
