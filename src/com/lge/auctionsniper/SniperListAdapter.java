@@ -20,6 +20,7 @@ public class SniperListAdapter extends BaseAdapter {
 
 	private String status;
 	private Context context;
+	private SniperState sniperStatus;
 
 	public SniperListAdapter(Context context) {
 		this.context = context;
@@ -57,11 +58,19 @@ public class SniperListAdapter extends BaseAdapter {
 		}
 		ViewHolder holder = (ViewHolder) convertView.getTag();
 		holder.status.setText(status);
+		holder.itemId.setText(sniperStatus.itemId);
+		holder.price.setText(Integer.toString(sniperStatus.lastPrice));
+		holder.bid.setText(Integer.toString(sniperStatus.lastBid));
 		return convertView;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
+		notifyDataSetChanged();
+	}
+
+	public void sniperStatusChanged(SniperState sniperStatus) {
+		this.sniperStatus = sniperStatus;
 		notifyDataSetChanged();
 	}
 }
