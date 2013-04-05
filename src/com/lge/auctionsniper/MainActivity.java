@@ -103,11 +103,6 @@ public class MainActivity extends Activity implements SniperListener {
 	}
 
 	@Override
-	public void sniperWinning() {
-		showStatus(R.string.status_winning);
-	}
-
-	@Override
 	public void sniperWon() {
 		showStatus(R.string.status_won);
 	}

@@ -31,4 +31,16 @@ public class SniperSnapshot {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
+
+	public static SniperSnapshot joining(String itemId) {
+		return new SniperSnapshot(itemId, 0, 0, SniperState.JOINING);
+	}
+
+	public SniperSnapshot winning(int price) {
+		return new SniperSnapshot(itemId, price, price, SniperState.WINNING);
+	}
+
+	public SniperSnapshot bidding(int price, int bid) {
+		return new SniperSnapshot(itemId, price, bid, SniperState.BIDDING);
+	}
 }
