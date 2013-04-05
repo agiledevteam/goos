@@ -1,6 +1,7 @@
 package com.lge.auctionsniper.unittest;
 
 import static com.lge.auctionsniper.SniperState.BIDDING;
+import static com.lge.auctionsniper.SniperState.WINNING;
 import static org.hamcrest.Matchers.equalTo;
 import junit.framework.TestCase;
 
@@ -86,9 +87,17 @@ public class AuctionSniperTest extends TestCase {
 	public void testReportsIsWinningWhenCurrentPriceComesFromSniper() {
 		context.checking(new Expectations() {
 			{
-				atLeast(1).of(sniperListener).sniperWinning();
+				ignoring(auction);
+				allowing(sniperListener).sniperStateChanged(
+						new SniperSnapshot(ITEM_ID, 100, 123, BIDDING));
+				then(sniperState.is("bidding"));
+				atLeast(1).of(sniperListener).sniperStateChanged(
+						new SniperSnapshot(ITEM_ID, 123, 123,
+								SniperState.WINNING));
+				when(sniperState.is("bidding"));
 			}
 		});
+		sniper.currentPrice(100, 23, PriceSource.FromOtherBidder);
 		sniper.currentPrice(123, 45, PriceSource.FromSniper);
 	}
 
@@ -96,7 +105,8 @@ public class AuctionSniperTest extends TestCase {
 		context.checking(new Expectations() {
 			{
 				ignoring(auction);
-				allowing(sniperListener).sniperWinning();
+				allowing(sniperListener).sniperStateChanged(
+						with(aSniperThatIs(WINNING)));
 				then(sniperState.is("winning"));
 				atLeast(1).of(sniperListener).sniperWon();
 				when(sniperState.is("winning"));
