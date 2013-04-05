@@ -1,7 +1,11 @@
 package com.lge.auctionsniper.unittest;
 
+import static com.lge.auctionsniper.SniperState.BIDDING;
+import static org.hamcrest.Matchers.equalTo;
 import junit.framework.TestCase;
 
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.States;
@@ -43,8 +47,8 @@ public class AuctionSniperTest extends TestCase {
 		context.checking(new Expectations() {
 			{
 				ignoring(auction);
-				allowing(sniperListener).sniperBidding(
-						with(any(SniperSnapshot.class)));
+				allowing(sniperListener).sniperStateChanged(
+						with(aSniperThatIs(BIDDING)));
 				then(sniperState.is("bidding"));
 				atLeast(1).of(sniperListener).sniperLost();
 				when(sniperState.is("bidding"));
@@ -52,6 +56,16 @@ public class AuctionSniperTest extends TestCase {
 		});
 		sniper.currentPrice(123, 45, PriceSource.FromOtherBidder);
 		sniper.auctionClosed();
+	}
+
+	protected Matcher<SniperSnapshot> aSniperThatIs(SniperState state) {
+		return new FeatureMatcher<SniperSnapshot, SniperState>(equalTo(state),
+				"sniper that is ", "was ") {
+			@Override
+			protected SniperState featureValueOf(SniperSnapshot snapshot) {
+				return snapshot.state;
+			}
+		};
 	}
 
 	public void testBidsHigherAndReportsBiddingWhenNewPriceArrives()
@@ -62,9 +76,8 @@ public class AuctionSniperTest extends TestCase {
 		context.checking(new Expectations() {
 			{
 				one(auction).bid(price + increment);
-				atLeast(1).of(sniperListener).sniperBidding(
-						new SniperSnapshot(ITEM_ID, price, bid,
-								SniperState.BIDDING));
+				atLeast(1).of(sniperListener).sniperStateChanged(
+						new SniperSnapshot(ITEM_ID, price, bid, BIDDING));
 			}
 		});
 		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
