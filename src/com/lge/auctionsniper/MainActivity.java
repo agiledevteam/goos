@@ -36,8 +36,7 @@ public class MainActivity extends Activity implements SniperListener {
 			@Override
 			public void onClick(View v) {
 				snipers.sniperStatusChanged(new SniperSnapshot("item-54321", 0,
-						0, SniperState.JOINING),
-						getString(R.string.status_joining));
+						0, SniperState.JOINING));
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -98,8 +97,7 @@ public class MainActivity extends Activity implements SniperListener {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				snipers.sniperStatusChanged(state,
-						getString(R.string.status_bidding));
+				snipers.sniperStatusChanged(state);
 			}
 		});
 	}

@@ -45,7 +45,7 @@ public class SniperListAdapterTest extends AndroidTestCase {
 
 	public void testViewShowsPriceDetails() throws Exception {
 		String bidding = context.getString(R.string.status_bidding);
-		adapter.sniperStatusChanged(new SniperSnapshot(ITEM_ID, 1000, 1200, SniperState.BIDDING), bidding);
+		adapter.sniperStatusChanged(new SniperSnapshot(ITEM_ID, 1000, 1200, SniperState.BIDDING));
 
 		assertTrue(onChanged);
 		

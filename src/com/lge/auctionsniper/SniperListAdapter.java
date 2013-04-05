@@ -72,10 +72,20 @@ public class SniperListAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	public void sniperStatusChanged(SniperSnapshot sniperStatus,
-			String statusText) {
+	public void sniperStatusChanged(SniperSnapshot sniperStatus) {
 		this.sniperStatus = sniperStatus;
-		this.status = statusText;
+		this.status = getSniperStateText(sniperStatus.state);
 		notifyDataSetChanged();
+	}
+
+	private String getSniperStateText(SniperState state) {
+		switch (state) {
+		case JOINING:
+			return context.getString(R.string.status_joining);
+		case BIDDING:
+			return context.getString(R.string.status_bidding);
+		default:
+			return "";
+		}
 	}
 }
