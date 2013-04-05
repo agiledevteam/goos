@@ -20,7 +20,7 @@ public class SniperListAdapter extends BaseAdapter {
 
 	private String status;
 	private Context context;
-	private SniperState sniperStatus;
+	private SniperState sniperStatus = new SniperState("", 0, 0);
 
 	public SniperListAdapter(Context context) {
 		this.context = context;

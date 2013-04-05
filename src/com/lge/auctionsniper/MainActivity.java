@@ -35,7 +35,8 @@ public class MainActivity extends Activity implements SniperListener {
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showStatus(R.string.status_joining);
+				snipers.setStatus(getString(R.string.status_joining));
+				snipers.sniperStatusChanged(new SniperState("item-54321", 0, 0));
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
