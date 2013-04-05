@@ -11,7 +11,7 @@ import com.objogate.wl.Query;
 public class TextViewDriver extends ViewDriver<TextView> {
 
 	public TextViewDriver(AndroidDriver<Activity> parentDriver, int resId) {
-		super(parentDriver, resId);
+		super(parentDriver, TextView.class, resId);
 	}
 
 	public void hasText(Matcher<String> equalTo) {

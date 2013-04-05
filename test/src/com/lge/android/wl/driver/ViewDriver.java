@@ -30,9 +30,9 @@ public class ViewDriver<T extends View> extends AndroidDriver<T> {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ViewDriver(AndroidDriver parentDriver, final int resId) {
+	public ViewDriver(AndroidDriver parentDriver, Class<T> viewClass, final int resId) {
 		super(parentDriver.solo, parentDriver.prober, new ViewSelector<T>(
-				parentDriver.solo, resId));
+				parentDriver.solo, viewClass, resId));
 	}
 
 	public void is(Matcher<? super T> criteria) {

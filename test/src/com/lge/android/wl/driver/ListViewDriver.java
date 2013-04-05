@@ -15,7 +15,7 @@ public class ListViewDriver extends ViewDriver<ListView> {
 
 	@SuppressWarnings("rawtypes")
 	public ListViewDriver(AndroidDriver parentDriver, int resId) {
-		super(parentDriver, resId);
+		super(parentDriver, ListView.class, resId);
 	}
 
 	public void hasItem(Matcher<View> matcher) {
