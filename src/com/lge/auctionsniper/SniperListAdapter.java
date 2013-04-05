@@ -20,7 +20,8 @@ public class SniperListAdapter extends BaseAdapter {
 
 	private String status;
 	private Context context;
-	private SniperState sniperStatus = new SniperState("", 0, 0);
+	private SniperSnapshot sniperStatus = new SniperSnapshot("", 0, 0,
+			SniperState.JOINING);
 
 	public SniperListAdapter(Context context) {
 		this.context = context;
@@ -50,10 +51,12 @@ public class SniperListAdapter extends BaseAdapter {
 					false);
 
 			ViewHolder holder = new ViewHolder();
-			holder.itemId = (TextView) convertView.findViewById(R.id.item_id_text);
+			holder.itemId = (TextView) convertView
+					.findViewById(R.id.item_id_text);
 			holder.price = (TextView) convertView.findViewById(R.id.price_text);
 			holder.bid = (TextView) convertView.findViewById(R.id.bid_text);
-			holder.status = (TextView) convertView.findViewById(R.id.status_text);
+			holder.status = (TextView) convertView
+					.findViewById(R.id.status_text);
 			convertView.setTag(holder);
 		}
 		ViewHolder holder = (ViewHolder) convertView.getTag();
@@ -69,7 +72,8 @@ public class SniperListAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	public void sniperStatusChanged(SniperState sniperStatus, String statusText) {
+	public void sniperStatusChanged(SniperSnapshot sniperStatus,
+			String statusText) {
 		this.sniperStatus = sniperStatus;
 		this.status = statusText;
 		notifyDataSetChanged();

@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import com.lge.auctionsniper.R;
 import com.lge.auctionsniper.SniperListAdapter;
 import com.lge.auctionsniper.SniperListAdapter.ViewHolder;
+import com.lge.auctionsniper.SniperSnapshot;
 import com.lge.auctionsniper.SniperState;
 
 public class SniperListAdapterTest extends AndroidTestCase {
@@ -44,7 +45,7 @@ public class SniperListAdapterTest extends AndroidTestCase {
 
 	public void testViewShowsPriceDetails() throws Exception {
 		String bidding = context.getString(R.string.status_bidding);
-		adapter.sniperStatusChanged(new SniperState(ITEM_ID, 1000, 1200), bidding);
+		adapter.sniperStatusChanged(new SniperSnapshot(ITEM_ID, 1000, 1200, SniperState.BIDDING), bidding);
 
 		assertTrue(onChanged);
 		

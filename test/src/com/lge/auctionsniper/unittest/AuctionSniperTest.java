@@ -10,6 +10,7 @@ import com.lge.auctionsniper.Auction;
 import com.lge.auctionsniper.AuctionEventListener.PriceSource;
 import com.lge.auctionsniper.AuctionSniper;
 import com.lge.auctionsniper.SniperListener;
+import com.lge.auctionsniper.SniperSnapshot;
 import com.lge.auctionsniper.SniperState;
 
 public class AuctionSniperTest extends TestCase {
@@ -43,7 +44,7 @@ public class AuctionSniperTest extends TestCase {
 			{
 				ignoring(auction);
 				allowing(sniperListener).sniperBidding(
-						with(any(SniperState.class)));
+						with(any(SniperSnapshot.class)));
 				then(sniperState.is("bidding"));
 				atLeast(1).of(sniperListener).sniperLost();
 				when(sniperState.is("bidding"));
@@ -62,7 +63,8 @@ public class AuctionSniperTest extends TestCase {
 			{
 				one(auction).bid(price + increment);
 				atLeast(1).of(sniperListener).sniperBidding(
-						new SniperState(ITEM_ID, price, bid));
+						new SniperSnapshot(ITEM_ID, price, bid,
+								SniperState.BIDDING));
 			}
 		});
 		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
