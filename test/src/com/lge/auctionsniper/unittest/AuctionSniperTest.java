@@ -10,13 +10,15 @@ import com.lge.auctionsniper.Auction;
 import com.lge.auctionsniper.AuctionEventListener.PriceSource;
 import com.lge.auctionsniper.AuctionSniper;
 import com.lge.auctionsniper.SniperListener;
+import com.lge.auctionsniper.SniperState;
 
 public class AuctionSniperTest extends TestCase {
+	protected static final String ITEM_ID = "item";
 	private final Mockery context = new Mockery();
 	private final SniperListener sniperListener = context
 			.mock(SniperListener.class);
 	private final Auction auction = context.mock(Auction.class);
-	private final AuctionSniper sniper = new AuctionSniper(auction,
+	private final AuctionSniper sniper = new AuctionSniper(ITEM_ID, auction,
 			sniperListener);
 
 	private final States sniperState = context.states("sniper");
@@ -40,7 +42,8 @@ public class AuctionSniperTest extends TestCase {
 		context.checking(new Expectations() {
 			{
 				ignoring(auction);
-				allowing(sniperListener).sniperBidding();
+				allowing(sniperListener).sniperBidding(
+						with(any(SniperState.class)));
 				then(sniperState.is("bidding"));
 				atLeast(1).of(sniperListener).sniperLost();
 				when(sniperState.is("bidding"));
@@ -54,10 +57,12 @@ public class AuctionSniperTest extends TestCase {
 			throws Exception {
 		final int price = 1001;
 		final int increment = 25;
+		final int bid = price + increment;
 		context.checking(new Expectations() {
 			{
 				one(auction).bid(price + increment);
-				atLeast(1).of(sniperListener).sniperBidding();
+				atLeast(1).of(sniperListener).sniperBidding(
+						new SniperState(ITEM_ID, price, bid));
 			}
 		});
 		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
