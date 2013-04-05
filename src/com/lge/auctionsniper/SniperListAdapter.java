@@ -69,8 +69,9 @@ public class SniperListAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	public void sniperStatusChanged(SniperState sniperStatus) {
+	public void sniperStatusChanged(SniperState sniperStatus, String statusText) {
 		this.sniperStatus = sniperStatus;
+		this.status = statusText;
 		notifyDataSetChanged();
 	}
 }

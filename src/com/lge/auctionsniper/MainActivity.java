@@ -27,7 +27,7 @@ public class MainActivity extends Activity implements SniperListener {
 		setContentView(R.layout.activity_main);
 
 		snipers = new SniperListAdapter(this);
-		
+
 		ListView listView = (ListView) findViewById(R.id.sniper_status);
 		listView.setAdapter(snipers);
 
@@ -35,8 +35,9 @@ public class MainActivity extends Activity implements SniperListener {
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				snipers.setStatus(getString(R.string.status_joining));
-				snipers.sniperStatusChanged(new SniperState("item-54321", 0, 0));
+				snipers.sniperStatusChanged(
+						new SniperState("item-54321", 0, 0),
+						getString(R.string.status_joining));
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -93,8 +94,13 @@ public class MainActivity extends Activity implements SniperListener {
 	}
 
 	@Override
-	public void sniperBidding(SniperState state) {
-		showStatus(R.string.status_bidding);
+	public void sniperBidding(final SniperState state) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				snipers.sniperStatusChanged(state, getString(R.string.status_bidding));
+			}
+		});
 	}
 
 	@Override
