@@ -10,23 +10,32 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements SniperListener {
 
 	private Chat notToBeGCd;
+	private SniperListAdapter snipers;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		snipers = new SniperListAdapter(this);
+		
+		ListView listView = (ListView) findViewById(R.id.sniper_status);
+		listView.setAdapter(snipers);
+
 		Button button = (Button) findViewById(R.id.join_button);
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// for now, we hard-coded the connection information
-				// this will be replaced with user input.
+				showStatus(R.string.status_joining);
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -101,8 +110,7 @@ public class MainActivity extends Activity implements SniperListener {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				TextView textView = (TextView) findViewById(R.id.sniper_status);
-				textView.setText(status);
+				snipers.setStatus(getString(status));
 			}
 		});
 	}

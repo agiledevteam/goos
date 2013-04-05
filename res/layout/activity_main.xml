@@ -12,12 +12,11 @@
         android:layout_alignParentLeft="true"
         android:text="@string/join"
         />
-    <TextView
+    <ListView
         android:id="@+id/sniper_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/status_joining" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/join_button"
+        />
 
 </RelativeLayout>
