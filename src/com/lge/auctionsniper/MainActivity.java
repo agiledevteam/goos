@@ -13,7 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class MainActivity extends Activity implements SniperListener {
+public class MainActivity extends Activity {
 
 	private Chat notToBeGCd;
 	private SniperListAdapter snipers;
@@ -32,7 +32,7 @@ public class MainActivity extends Activity implements SniperListener {
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				snipers.sniperStatusChanged(new SniperSnapshot("item-54321", 0,
+				snipers.sniperStateChanged(new SniperSnapshot("item-54321", 0,
 						0, SniperState.JOINING));
 				new Thread(new Runnable() {
 					@Override
@@ -66,7 +66,8 @@ public class MainActivity extends Activity implements SniperListener {
 
 		Auction auction = new XMPPAuction(chat);
 		chat.addMessageListener(new AuctionMessageTranslator(connection
-				.getUser(), new AuctionSniper(itemId, auction, this)));
+				.getUser(), new AuctionSniper(itemId, auction,
+				new UiThreadSniperListener(snipers))));
 		auction.join();
 	}
 
@@ -82,15 +83,5 @@ public class MainActivity extends Activity implements SniperListener {
 		connection.connect();
 		connection.login(username, password);
 		return connection;
-	}
-
-	@Override
-	public void sniperStateChanged(final SniperSnapshot state) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				snipers.sniperStatusChanged(state);
-			}
-		});
 	}
 }

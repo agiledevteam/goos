@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class SniperListAdapter extends BaseAdapter {
+public class SniperListAdapter extends BaseAdapter implements SniperListener {
 
 	public static class ViewHolder {
 
@@ -18,7 +18,6 @@ public class SniperListAdapter extends BaseAdapter {
 
 	}
 
-	private String status;
 	private Context context;
 	private SniperSnapshot sniperStatus = new SniperSnapshot("", 0, 0,
 			SniperState.JOINING);
@@ -34,7 +33,7 @@ public class SniperListAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		return status;
+		return sniperStatus;
 	}
 
 	@Override
@@ -60,21 +59,16 @@ public class SniperListAdapter extends BaseAdapter {
 			convertView.setTag(holder);
 		}
 		ViewHolder holder = (ViewHolder) convertView.getTag();
-		holder.status.setText(status);
+		holder.status.setText(getSniperStateText(sniperStatus.state));
 		holder.itemId.setText(sniperStatus.itemId);
 		holder.price.setText(Integer.toString(sniperStatus.lastPrice));
 		holder.bid.setText(Integer.toString(sniperStatus.lastBid));
 		return convertView;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-		notifyDataSetChanged();
-	}
-
-	public void sniperStatusChanged(SniperSnapshot sniperStatus) {
+	@Override
+	public void sniperStateChanged(SniperSnapshot sniperStatus) {
 		this.sniperStatus = sniperStatus;
-		this.status = getSniperStateText(sniperStatus.state);
 		notifyDataSetChanged();
 	}
 
