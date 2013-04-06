@@ -10,11 +10,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class MainActivity extends Activity implements SniperListener {
 
@@ -88,30 +85,11 @@ public class MainActivity extends Activity implements SniperListener {
 	}
 
 	@Override
-	public void sniperLost() {
-		showStatus(R.string.status_lost);
-	}
-
-	@Override
 	public void sniperStateChanged(final SniperSnapshot state) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				snipers.sniperStatusChanged(state);
-			}
-		});
-	}
-
-	@Override
-	public void sniperWon() {
-		showStatus(R.string.status_won);
-	}
-
-	private void showStatus(final int status) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				snipers.setStatus(getString(status));
 			}
 		});
 	}

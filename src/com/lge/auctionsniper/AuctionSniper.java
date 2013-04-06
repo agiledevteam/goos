@@ -1,7 +1,6 @@
 package com.lge.auctionsniper;
 
 public class AuctionSniper implements AuctionEventListener {
-	private boolean isWinning = false;
 	private final Auction auction;
 	private final SniperListener sniperListener;
 	private SniperSnapshot snapshot;
@@ -15,21 +14,21 @@ public class AuctionSniper implements AuctionEventListener {
 
 	@Override
 	public void auctionClosed() {
-		if (isWinning)
-			sniperListener.sniperWon();
-		else
-			sniperListener.sniperLost();
+		snapshot = snapshot.closed();
+		sniperListener.sniperStateChanged(snapshot);
 	}
 
 	@Override
 	public void currentPrice(int price, int increment, PriceSource priceSource) {
-		isWinning = priceSource == PriceSource.FromSniper;
-		if (isWinning) {
+		switch (priceSource) {
+		case FromSniper:
 			snapshot = snapshot.winning(price);
-		} else {
+			break;
+		case FromOtherBidder:
 			int bid = price + increment;
 			auction.bid(bid);
 			snapshot = snapshot.bidding(price, bid);
+			break;
 		}
 		sniperListener.sniperStateChanged(snapshot);
 	}

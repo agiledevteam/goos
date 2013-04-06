@@ -84,8 +84,14 @@ public class SniperListAdapter extends BaseAdapter {
 			return context.getString(R.string.status_joining);
 		case BIDDING:
 			return context.getString(R.string.status_bidding);
+		case WINNING:
+			return context.getString(R.string.status_winning);
+		case WON:
+			return context.getString(R.string.status_won);
+		case LOST:
+			return context.getString(R.string.status_lost);
 		default:
-			return "";
+			throw new IllegalArgumentException("No field for " + state);
 		}
 	}
 }

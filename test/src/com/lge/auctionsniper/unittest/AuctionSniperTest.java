@@ -1,7 +1,9 @@
 package com.lge.auctionsniper.unittest;
 
 import static com.lge.auctionsniper.SniperState.BIDDING;
+import static com.lge.auctionsniper.SniperState.LOST;
 import static com.lge.auctionsniper.SniperState.WINNING;
+import static com.lge.auctionsniper.SniperState.WON;
 import static org.hamcrest.Matchers.equalTo;
 import junit.framework.TestCase;
 
@@ -38,7 +40,8 @@ public class AuctionSniperTest extends TestCase {
 	public void testReportsLostIfAuctionClosesImmediately() throws Exception {
 		context.checking(new Expectations() {
 			{
-				atLeast(1).of(sniperListener).sniperLost();
+				atLeast(1).of(sniperListener).sniperStateChanged(
+						with(aSniperThatIs(LOST)));
 			}
 		});
 		sniper.auctionClosed();
@@ -51,7 +54,8 @@ public class AuctionSniperTest extends TestCase {
 				allowing(sniperListener).sniperStateChanged(
 						with(aSniperThatIs(BIDDING)));
 				then(sniperState.is("bidding"));
-				atLeast(1).of(sniperListener).sniperLost();
+				atLeast(1).of(sniperListener).sniperStateChanged(
+						new SniperSnapshot(ITEM_ID, 123, 168, LOST));
 				when(sniperState.is("bidding"));
 			}
 		});
@@ -108,7 +112,8 @@ public class AuctionSniperTest extends TestCase {
 				allowing(sniperListener).sniperStateChanged(
 						with(aSniperThatIs(WINNING)));
 				then(sniperState.is("winning"));
-				atLeast(1).of(sniperListener).sniperWon();
+				atLeast(1).of(sniperListener).sniperStateChanged(
+						new SniperSnapshot(ITEM_ID, 123, 123, WON));
 				when(sniperState.is("winning"));
 			}
 		});
