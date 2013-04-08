@@ -6,11 +6,13 @@ import com.lge.auctionsniper.R;
 public class ApplicationRunner {
 	public static final String SNIPER_XMPP_ID = "sniper@localhost";
 	private AuctionSniperDriver driver;
+	private String itemId;
 
 	public ApplicationRunner() {
 	}
 
 	public void startBiddingIn(FakeAuctionServer auction, Solo solo) {
+		itemId = auction.getItemId();
 		driver = new AuctionSniperDriver(solo, 1000);
 		driver.clickJoinButton();
 		driver.showsSniperStatus(R.string.status_joining);
@@ -33,5 +35,17 @@ public class ApplicationRunner {
 	}
 
 	public void stop() {
+	}
+
+	public void hasShownSniperIsBidding(int lastPrice, int lastBid) {
+		driver.showsSniperStatus(itemId, lastPrice, lastBid, R.string.status_bidding);
+	}
+
+	public void hasShownSniperIsWinning(int price) {
+		driver.showsSniperStatus(itemId, price, price, R.string.status_winning);
+	}
+
+	public void showsSniperHasWonAuction(int price) {
+		driver.showsSniperStatus(itemId, price, price, R.string.status_won);
 	}
 }
