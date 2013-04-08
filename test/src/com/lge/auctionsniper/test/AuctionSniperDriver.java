@@ -16,19 +16,6 @@ public class AuctionSniperDriver extends AndroidDriver<Activity> {
 	public void showsSniperStatus(int resId) {
 		final String statusText = solo.getString(resId);
 		new TextViewDriver(this, R.id.sniper_status).hasText(equalTo(statusText));
-//		new ListViewDriver(this, R.id.sniper_status).hasItem(
-//				allText(), hasItem(statusText));
-	}
-
-	public void showsSniperStatus(String itemId, int lastPrice, int lastBid,
-			int resId) {
-		final String statusText = solo.getString(resId);
-		new TextViewDriver(this, R.id.sniper_status).hasText(equalTo(statusText));
-
-//		new ListViewDriver(this, R.id.sniper_status).hasItem(
-//				allText(),
-//				allOf(hasItem(itemId), hasItem(valueOf(lastPrice)),
-//						hasItem(valueOf(lastBid)), hasItem(statusText)));
 	}
 
 	public void clickJoinButton() {
