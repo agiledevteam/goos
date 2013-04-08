@@ -67,7 +67,7 @@ public class MainActivity extends Activity implements SniperListener {
 
 		Auction auction = new XMPPAuction(chat);
 		chat.addMessageListener(new AuctionMessageTranslator(connection
-				.getUser(), new AuctionSniper(auction, this)));
+				.getUser(), new AuctionSniper(itemId, auction, this)));
 		auction.join();
 	}
 
@@ -91,8 +91,14 @@ public class MainActivity extends Activity implements SniperListener {
 	}
 
 	@Override
-	public void sniperBidding() {
+	public void sniperBidding(final SniperState sniperState) {
 		showStatus(R.string.status_bidding);
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				//adapter.setSniperState(sniperState, getString(R.string.status_bidding));
+			}
+		});
 	}
 
 	@Override
