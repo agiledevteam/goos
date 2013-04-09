@@ -38,13 +38,16 @@ public class AuctionSniperTest extends TestCase {
 		context.checking(new Expectations() {
 			{
 				atLeast(1).of(sniperListener).sniperStateChanged(
-						with(aSniperThatIs(LOST)));
+						new SniperSnapshot(ITEM_ID, 0, 0, LOST));
 			}
 		});
 		sniper.auctionClosed();
 	}
 
 	public void testReportsLostIfAuctionClosesWhenBidding() throws Exception {
+		final int price = 123;
+		final int increment = 45;
+		final int bid = price + increment;
 		context.checking(new Expectations() {
 			{
 				ignoring(auction);
@@ -52,11 +55,11 @@ public class AuctionSniperTest extends TestCase {
 						with(aSniperThatIs(SniperState.BIDDING)));
 				then(sniperState.is("bidding"));
 				atLeast(1).of(sniperListener).sniperStateChanged(
-						with(aSniperThatIs(LOST)));
+						new SniperSnapshot(ITEM_ID, price, bid, LOST));
 				when(sniperState.is("bidding"));
 			}
 		});
-		sniper.currentPrice(123, 45, PriceSource.FromOtherBidder);
+		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
 		sniper.auctionClosed();
 	}
 
@@ -87,16 +90,18 @@ public class AuctionSniperTest extends TestCase {
 	}
 
 	public void testReportsIsWinningWhenCurrentPriceComesFromSniper() {
+		final int price = 123;
 		context.checking(new Expectations() {
 			{
 				atLeast(1).of(sniperListener).sniperStateChanged(
-						with(aSniperThatIs(WINNING)));
+						new SniperSnapshot(ITEM_ID, price, price, WINNING));
 			}
 		});
-		sniper.currentPrice(123, 45, PriceSource.FromSniper);
+		sniper.currentPrice(price, 45, PriceSource.FromSniper);
 	}
 
 	public void testReportsWonIfAuctionClosesWhenWinning() {
+		final int price = 123;
 		context.checking(new Expectations() {
 			{
 				ignoring(auction);
@@ -104,11 +109,11 @@ public class AuctionSniperTest extends TestCase {
 						with(aSniperThatIs(WINNING)));
 				then(sniperState.is("winning"));
 				atLeast(1).of(sniperListener).sniperStateChanged(
-						with(aSniperThatIs(WON)));
+						new SniperSnapshot(ITEM_ID, price, price, WON));
 				when(sniperState.is("winning"));
 			}
 		});
-		sniper.currentPrice(123, 45, PriceSource.FromSniper);
+		sniper.currentPrice(price, 45, PriceSource.FromSniper);
 		sniper.auctionClosed();
 	}
 }
