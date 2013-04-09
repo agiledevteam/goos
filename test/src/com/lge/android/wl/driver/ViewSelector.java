@@ -40,7 +40,7 @@ public class ViewSelector<T> implements Selector<T> {
 		View v = solo.getView(resId);
 		if (v == null)
 			return;
-		if (viewClass != null && !v.getClass().equals(viewClass))
+		if (viewClass != null && !viewClass.isAssignableFrom(v.getClass()))
 			return;
 		found = (T) v;
 
