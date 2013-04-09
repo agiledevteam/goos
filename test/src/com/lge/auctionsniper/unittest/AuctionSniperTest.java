@@ -67,8 +67,8 @@ public class AuctionSniperTest extends TestCase {
 		return new FeatureMatcher<SniperSnapshot, SniperState>(equalTo(state),
 				"state ", "was ") {
 			@Override
-			protected SniperState featureValueOf(SniperSnapshot arg0) {
-				return arg0.state;
+			protected SniperState featureValueOf(SniperSnapshot snaptshot) {
+				return snaptshot.state;
 			}
 		};
 	}

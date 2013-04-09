@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class SniperListAdapter extends BaseAdapter {
+public class SniperListAdapter extends BaseAdapter implements SniperListener {
 
 	public class ViewHolder {
 		public TextView itemId;
@@ -17,6 +17,8 @@ public class SniperListAdapter extends BaseAdapter {
 	}
 
 	private final Context context;
+	// for now, to avoid NPE
+	// it will replaced with array or list
 	private SniperSnapshot sniperState = new SniperSnapshot("", 0, 0, SniperState.JOINING);
 
 	public SniperListAdapter(Context context) {
@@ -76,6 +78,7 @@ public class SniperListAdapter extends BaseAdapter {
 		}
 	}
 
+	@Override
 	public void sniperStateChanged(SniperSnapshot sniperState) {
 		this.sniperState = sniperState;
 		notifyDataSetChanged();
