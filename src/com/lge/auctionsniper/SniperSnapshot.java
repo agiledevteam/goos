@@ -1,5 +1,7 @@
 package com.lge.auctionsniper;
 
+import static com.lge.auctionsniper.SniperState.*;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -31,5 +33,21 @@ public class SniperSnapshot {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+	public static SniperSnapshot joining(String itemId) {
+		return new SniperSnapshot(itemId, 0, 0, JOINING);
+	}
+
+	public SniperSnapshot winning(int price) {
+		return new SniperSnapshot(itemId, price, price, WINNING);
+	}
+
+	public SniperSnapshot bidding(int price, int bid) {
+		return new SniperSnapshot(itemId, price, bid, BIDDING);
+	}
+
+	public SniperSnapshot auctionClosed() {
+		return new SniperSnapshot(itemId, price, bid, state.auctionClosed());
 	}
 }
