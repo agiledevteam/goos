@@ -32,6 +32,8 @@ public class MainActivity extends Activity implements SniperListener {
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				final String itemId = "item-54321";
+				sniperStateChanged(SniperSnapshot.joining(itemId));
 				// for now, we hard-coded the connection information
 				// this will be replaced with user input.
 				new Thread(new Runnable() {
@@ -39,7 +41,7 @@ public class MainActivity extends Activity implements SniperListener {
 					public void run() {
 						try {
 							joinAuction("localhost", "sniper", "sniper",
-									"item-54321");
+									itemId);
 						} catch (XMPPException e) {
 							e.printStackTrace();
 						}

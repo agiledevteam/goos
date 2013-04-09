@@ -15,30 +15,15 @@ public class ApplicationRunner {
 		itemId = auction.getItemId();
 		driver = new AuctionSniperDriver(solo, 1000);
 		driver.clickJoinButton();
-		driver.showsSniperStatus(R.string.status_joining);
-	}
-
-	public void showsSniperHasLostAuction() {
-		driver.showsSniperStatus(R.string.status_lost);
-	}
-
-	public void hasShownSniperIsBidding() {
-		driver.showsSniperStatus(R.string.status_bidding);
-	}
-
-	public void hasShownSniperIsWinning() {
-		driver.showsSniperStatus(R.string.status_winning);
-	}
-
-	public void showsSniperHasWonAuction() {
-		driver.showsSniperStatus(R.string.status_won);
+		driver.showsSniperStatus(itemId, 0, 0, R.string.status_joining);
 	}
 
 	public void stop() {
 	}
 
 	public void hasShownSniperIsBidding(int lastPrice, int lastBid) {
-		driver.showsSniperStatus(itemId, lastPrice, lastBid, R.string.status_bidding);
+		driver.showsSniperStatus(itemId, lastPrice, lastBid,
+				R.string.status_bidding);
 	}
 
 	public void hasShownSniperIsWinning(int price) {
@@ -47,5 +32,10 @@ public class ApplicationRunner {
 
 	public void showsSniperHasWonAuction(int price) {
 		driver.showsSniperStatus(itemId, price, price, R.string.status_won);
+	}
+
+	public void showsSniperHasLostAuction(int lastPrice, int lastBid) {
+		driver.showsSniperStatus(itemId, lastPrice, lastBid,
+				R.string.status_lost);
 	}
 }
