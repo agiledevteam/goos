@@ -15,6 +15,7 @@ import com.lge.auctionsniper.AuctionSniper;
 import com.lge.auctionsniper.SniperListener;
 import com.lge.auctionsniper.SniperSnapshot;
 import com.lge.auctionsniper.SniperState;
+import static com.lge.auctionsniper.SniperState.*;
 
 public class AuctionSniperTest extends TestCase {
 	protected static final String ITEM_ID = "item-id";
@@ -36,7 +37,8 @@ public class AuctionSniperTest extends TestCase {
 	public void testReportsLostIfAuctionClosesImmediately() throws Exception {
 		context.checking(new Expectations() {
 			{
-				atLeast(1).of(sniperListener).sniperLost();
+				atLeast(1).of(sniperListener).sniperStateChanged(
+						with(aSniperThatIs(LOST)));
 			}
 		});
 		sniper.auctionClosed();
@@ -49,7 +51,8 @@ public class AuctionSniperTest extends TestCase {
 				allowing(sniperListener).sniperStateChanged(
 						with(aSniperThatIs(SniperState.BIDDING)));
 				then(sniperState.is("bidding"));
-				atLeast(1).of(sniperListener).sniperLost();
+				atLeast(1).of(sniperListener).sniperStateChanged(
+						with(aSniperThatIs(LOST)));
 				when(sniperState.is("bidding"));
 			}
 		});
@@ -86,7 +89,8 @@ public class AuctionSniperTest extends TestCase {
 	public void testReportsIsWinningWhenCurrentPriceComesFromSniper() {
 		context.checking(new Expectations() {
 			{
-				atLeast(1).of(sniperListener).sniperWinning();
+				atLeast(1).of(sniperListener).sniperStateChanged(
+						with(aSniperThatIs(WINNING)));
 			}
 		});
 		sniper.currentPrice(123, 45, PriceSource.FromSniper);
@@ -96,9 +100,11 @@ public class AuctionSniperTest extends TestCase {
 		context.checking(new Expectations() {
 			{
 				ignoring(auction);
-				allowing(sniperListener).sniperWinning();
+				allowing(sniperListener).sniperStateChanged(
+						with(aSniperThatIs(WINNING)));
 				then(sniperState.is("winning"));
-				atLeast(1).of(sniperListener).sniperWon();
+				atLeast(1).of(sniperListener).sniperStateChanged(
+						with(aSniperThatIs(WON)));
 				when(sniperState.is("winning"));
 			}
 		});

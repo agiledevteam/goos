@@ -17,7 +17,6 @@ public class SniperListAdapter extends BaseAdapter {
 	}
 
 	private final Context context;
-	private String status = "";
 	private SniperSnapshot sniperState = new SniperSnapshot("", 0, 0, SniperState.JOINING);
 
 	public SniperListAdapter(Context context) {
@@ -56,7 +55,7 @@ public class SniperListAdapter extends BaseAdapter {
 		holder.itemId.setText(sniperState.itemId);
 		holder.lastPrice.setText(String.valueOf(sniperState.price));
 		holder.lastBid.setText(String.valueOf(sniperState.bid));
-		holder.status.setText(status);
+		holder.status.setText(getStateText(sniperState.state));
 		return convertView;
 	}
 
@@ -77,14 +76,8 @@ public class SniperListAdapter extends BaseAdapter {
 		}
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-		notifyDataSetChanged();
-	}
-
 	public void sniperStateChanged(SniperSnapshot sniperState) {
 		this.sniperState = sniperState;
-		this.status = getStateText(sniperState.state);
 		notifyDataSetChanged();
 	}
 }

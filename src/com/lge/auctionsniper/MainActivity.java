@@ -32,7 +32,6 @@ public class MainActivity extends Activity implements SniperListener {
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showStatus(R.string.status_joining);
 				// for now, we hard-coded the connection information
 				// this will be replaced with user input.
 				new Thread(new Runnable() {
@@ -86,35 +85,11 @@ public class MainActivity extends Activity implements SniperListener {
 	}
 
 	@Override
-	public void sniperLost() {
-		showStatus(R.string.status_lost);
-	}
-
-	@Override
 	public void sniperStateChanged(final SniperSnapshot sniperState) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				adapter.sniperStateChanged(sniperState);
-			}
-		});
-	}
-
-	@Override
-	public void sniperWinning() {
-		showStatus(R.string.status_winning);
-	}
-
-	@Override
-	public void sniperWon() {
-		showStatus(R.string.status_won);
-	}
-
-	private void showStatus(final int status) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				adapter.setStatus(getString(status));
 			}
 		});
 	}
