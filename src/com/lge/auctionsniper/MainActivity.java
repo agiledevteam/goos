@@ -91,7 +91,7 @@ public class MainActivity extends Activity implements SniperListener {
 	}
 
 	@Override
-	public void sniperBidding(final SniperSnapshot sniperState) {
+	public void sniperStateChanged(final SniperSnapshot sniperState) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
