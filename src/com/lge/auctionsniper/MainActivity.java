@@ -91,11 +91,11 @@ public class MainActivity extends Activity implements SniperListener {
 	}
 
 	@Override
-	public void sniperBidding(final SniperState sniperState) {
+	public void sniperBidding(final SniperSnapshot sniperState) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				adapter.sniperStateChanged(sniperState, R.string.status_bidding);
+				adapter.sniperStateChanged(sniperState);
 			}
 		});
 	}

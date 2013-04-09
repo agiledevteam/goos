@@ -18,7 +18,7 @@ public class SniperListAdapter extends BaseAdapter {
 
 	private final Context context;
 	private String status = "";
-	private SniperState sniperState = new SniperState("", 0, 0);
+	private SniperSnapshot sniperState = new SniperSnapshot("", 0, 0, SniperState.JOINING);
 
 	public SniperListAdapter(Context context) {
 		this.context = context;
@@ -60,14 +60,31 @@ public class SniperListAdapter extends BaseAdapter {
 		return convertView;
 	}
 
+	private String getStateText(SniperState state) {
+		switch (state) {
+		case JOINING:
+			return context.getString(R.string.status_joining);
+		case BIDDING:
+			return context.getString(R.string.status_bidding);
+		case WINNING:
+			return context.getString(R.string.status_winning);
+		case WON:
+			return context.getString(R.string.status_won);
+		case LOST:
+			return context.getString(R.string.status_lost);
+		default:
+			throw new IllegalArgumentException("Unknown state: " + state);
+		}
+	}
+
 	public void setStatus(String status) {
 		this.status = status;
 		notifyDataSetChanged();
 	}
 
-	public void sniperStateChanged(SniperState sniperState, int stateResId) {
-		this.status = context.getString(stateResId);
+	public void sniperStateChanged(SniperSnapshot sniperState) {
 		this.sniperState = sniperState;
+		this.status = getStateText(sniperState.state);
 		notifyDataSetChanged();
 	}
 }

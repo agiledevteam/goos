@@ -10,8 +10,9 @@ import android.widget.LinearLayout;
 
 import com.lge.auctionsniper.R;
 import com.lge.auctionsniper.SniperListAdapter;
-import com.lge.auctionsniper.SniperListAdapter.ViewHolder;
 import com.lge.auctionsniper.SniperState;
+import com.lge.auctionsniper.SniperListAdapter.ViewHolder;
+import com.lge.auctionsniper.SniperSnapshot;
 
 public class SniperListAdapterTest extends AndroidTestCase {
 	private static final String ITEM_ID = "item-id";
@@ -48,8 +49,7 @@ public class SniperListAdapterTest extends AndroidTestCase {
 		int price = 1000;
 		int bid = 1098;
 
-		adapter.sniperStateChanged(new SniperState(ITEM_ID, price, bid),
-				R.string.status_bidding);
+		adapter.sniperStateChanged(new SniperSnapshot(ITEM_ID, price, bid, SniperState.BIDDING));
 
 		View view = adapter.getView(0, null, parent);
 		SniperListAdapter.ViewHolder holder = (ViewHolder) view.getTag();
@@ -64,8 +64,7 @@ public class SniperListAdapterTest extends AndroidTestCase {
 	public void testNotifiesToListViewWhenSniperStateChanged() throws Exception {
 		int price = 1000;
 		int bid = 1098;
-		adapter.sniperStateChanged(new SniperState(ITEM_ID, price, bid),
-				R.string.status_bidding);
+		adapter.sniperStateChanged(new SniperSnapshot(ITEM_ID, price, bid, SniperState.BIDDING));
 
 		assertThat(methodCalls, containsString("onChanged "));
 	}
