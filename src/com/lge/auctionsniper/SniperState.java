@@ -6,9 +6,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class SniperState {
 
-	private final String itemId;
-	private final int price;
-	private final int bid;
+	public final String itemId;
+	public final int price;
+	public final int bid;
 
 	public SniperState(String itemId, int price, int bid) {
 		this.itemId = itemId;
