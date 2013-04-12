@@ -6,11 +6,15 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.packet.Message;
 
+import com.lge.auctionsniper.AuctionEventListener.PriceSource;
+
 public class AuctionMessageTranslator implements MessageListener {
 
 	private AuctionEventListener listener;
+	private String sniperId;
 
-	public AuctionMessageTranslator(AuctionEventListener listener) {
+	public AuctionMessageTranslator(String sniperId, AuctionEventListener listener) {
+		this.sniperId = sniperId;
 		this.listener = listener;
 	}
 
@@ -22,7 +26,7 @@ public class AuctionMessageTranslator implements MessageListener {
 			listener.auctionClosed();
 		} else if ("PRICE".equals(type)) {
 			listener.currentPrice(Integer.parseInt(event.get("CurrentPrice")),
-					Integer.parseInt(event.get("Increment")));
+					Integer.parseInt(event.get("Increment")), PriceSource.FromOtherBidder);
 		}
 	}
 

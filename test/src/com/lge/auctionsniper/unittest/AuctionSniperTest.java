@@ -4,6 +4,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 
 import com.lge.auctionsniper.Auction;
+import com.lge.auctionsniper.AuctionEventListener.PriceSource;
 import com.lge.auctionsniper.AuctionSniper;
 import com.lge.auctionsniper.SniperListener;
 
@@ -42,6 +43,6 @@ public class AuctionSniperTest extends TestCase {
 				atLeast(1).of(sniperListener).sniperBidding();
 			}
 		});
-		sniper.currentPrice(price, increment);
+		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
 	}
 }
