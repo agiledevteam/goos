@@ -32,6 +32,15 @@ public class AuctionSniperTest extends TestCase {
 		});
 		sniper.auctionClosed();
 	}
+	
+	public void testReportsIsWinningWhenCurrentPriceComesFromSniper() throws Exception {
+		context.checking(new Expectations() {
+			{
+				atLeast(1).of(sniperListener).sniperWinning();
+			}
+		});
+		sniper.currentPrice(123, 45, PriceSource.FromSniper);
+	}
 
 	public void testBidsHigherAndReportsBiddingWhenNewPriceArrives()
 			throws Exception {
