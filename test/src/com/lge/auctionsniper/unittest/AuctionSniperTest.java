@@ -2,6 +2,7 @@ package com.lge.auctionsniper.unittest;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.States;
 
 import com.lge.auctionsniper.Auction;
 import com.lge.auctionsniper.AuctionEventListener.PriceSource;
@@ -17,6 +18,7 @@ public class AuctionSniperTest extends TestCase {
 	private final Auction auction = context.mock(Auction.class);
 	private final AuctionSniper sniper = new AuctionSniper(auction,
 			sniperListener);
+	private final States	sniperState = context.states("sniper");
 
 	@Override
 	protected void tearDown() throws Exception {
@@ -24,12 +26,36 @@ public class AuctionSniperTest extends TestCase {
 		super.tearDown();
 	}
 
-	public void testReportsLostWhenAuctionCloses() throws Exception {
+	public void testReportsLostIfAuctionClosesImmediately() throws Exception {
 		context.checking(new Expectations() {
 			{
-				one(sniperListener).sniperLost();
+				atLeast(1).of(sniperListener).sniperLost();
 			}
 		});
+		sniper.auctionClosed();
+	}
+	
+	public void testReportsLostIfAuctionClosesWhenBidding() throws Exception {
+		context.checking(new Expectations() {
+			{
+				ignoring(auction);
+				allowing(sniperListener).sniperBidding(); then(sniperState.is("Bidding"));
+				atLeast(1).of(sniperListener).sniperLost(); when(sniperState.is("Bidding"));
+			}
+		});
+		sniper.currentPrice(123, 45, PriceSource.FromOtherBidder);
+		sniper.auctionClosed();
+	}
+	
+	public void testReportsWonIfAuctionClosesWhenWinning() throws Exception {
+		context.checking(new Expectations() {
+			{
+				ignoring(auction);
+				allowing(sniperListener).sniperWinning(); then(sniperState.is("Winning"));
+				atLeast(1).of(sniperListener).sniperWon(); when(sniperState.is("Winning"));
+			}
+		});
+		sniper.currentPrice(123, 45, PriceSource.FromSniper);
 		sniper.auctionClosed();
 	}
 	
