@@ -26,8 +26,12 @@ public class AuctionMessageTranslator implements MessageListener {
 			listener.auctionClosed();
 		} else if ("PRICE".equals(type)) {
 			listener.currentPrice(Integer.parseInt(event.get("CurrentPrice")),
-					Integer.parseInt(event.get("Increment")), PriceSource.FromOtherBidder);
+					Integer.parseInt(event.get("Increment")), isFrom(event.get("Bidder")));
 		}
+	}
+
+	private PriceSource isFrom(String parsedId) {
+		return (parsedId.split("@")[0].equals(sniperId.split("@")[0]))?PriceSource.FromSniper:PriceSource.FromOtherBidder;
 	}
 
 	private HashMap<String, String> unpackEventFrom(Message message) {
