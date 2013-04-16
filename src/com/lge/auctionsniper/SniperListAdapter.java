@@ -83,4 +83,9 @@ public class SniperListAdapter extends BaseAdapter implements SniperListener {
 		this.sniperState = sniperState;
 		notifyDataSetChanged();
 	}
+
+	public void addSniper(SniperSnapshot snapshot) {
+		// TODO Auto-generated method stub
+		
+	}
 }

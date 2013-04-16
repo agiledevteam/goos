@@ -1,5 +1,7 @@
 package com.lge.auctionsniper;
 
+import java.util.ArrayList;
+
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
@@ -16,32 +18,35 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	private Chat notToBeGCd;
+	private ArrayList<Chat> notToBeGCd = new ArrayList<Chat>();
 	private SniperListAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		adapter = new SniperListAdapter(this);
 		ListView list = (ListView) findViewById(R.id.sniper_list);
 		list.setAdapter(adapter);
-		
+
 		Button button = (Button) findViewById(R.id.join_button);
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				final String itemId = "item-54321";
-				adapter.sniperStateChanged(SniperSnapshot.joining(itemId));
+				final String [] itemIds = {"item-54321", "item-65432"};
+				adapter.sniperStateChanged(SniperSnapshot.joining(itemIds[0]));
 				// for now, we hard-coded the connection information
 				// this will be replaced with user input.
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
 						try {
-							joinAuction("localhost", "sniper", "sniper",
-									itemId);
+							XMPPConnection connection = connectTo("localhost",
+									"sniper", "sniper");
+							for (String itemId : itemIds) {
+								joinAuction(connection, itemId);
+							}
 						} catch (XMPPException e) {
 							e.printStackTrace();
 						}
@@ -59,18 +64,27 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	private void joinAuction(String host, String username, String password,
-			String itemId) throws XMPPException {
-		XMPPConnection connection = connectTo(host, username, password);
+	private void joinAuction(XMPPConnection connection, String itemId)
+			throws XMPPException {
+		safelyAddItemToView(SniperSnapshot.joining(itemId));
 		final Chat chat = connection.getChatManager().createChat(
 				auctionId(itemId, connection), null);
-		this.notToBeGCd = chat;
+		notToBeGCd.add(chat);
 
 		Auction auction = new XMPPAuction(chat);
 		chat.addMessageListener(new AuctionMessageTranslator(connection
 				.getUser(), new AuctionSniper(itemId, auction,
 				new UiThreadSniperListener(adapter))));
 		auction.join();
+	}
+
+	private void safelyAddItemToView(final SniperSnapshot snapshot) {
+		AndroidUtilities.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				adapter.addSniper(snapshot);
+			}
+		});
 	}
 
 	private String auctionId(String itemId, XMPPConnection connection) {
