@@ -31,9 +31,11 @@ public class SniperListAdapterTest extends AndroidTestCase {
 		adapter = new SniperListAdapter(getContext());
 		parent = new LinearLayout(getContext());
 		adapter.registerDataSetObserver(observer);
+		methodCalls = "";
 	}
 
 	public void testMakesDetailView() throws Exception {
+		adapter.addSniper(SniperSnapshot.joining("item123"));
 		View view = adapter.getView(0, null, parent);
 
 		SniperListAdapter.ViewHolder holder = (ViewHolder) view.getTag();
@@ -49,6 +51,7 @@ public class SniperListAdapterTest extends AndroidTestCase {
 		int price = 1000;
 		int bid = 1098;
 
+		adapter.addSniper(SniperSnapshot.joining(ITEM_ID));
 		adapter.sniperStateChanged(new SniperSnapshot(ITEM_ID, price, bid, SniperState.BIDDING));
 
 		View view = adapter.getView(0, null, parent);
@@ -62,10 +65,61 @@ public class SniperListAdapterTest extends AndroidTestCase {
 	}
 
 	public void testNotifiesToListViewWhenSniperStateChanged() throws Exception {
+		adapter.addSniper(SniperSnapshot.joining(ITEM_ID));
 		int price = 1000;
 		int bid = 1098;
 		adapter.sniperStateChanged(new SniperSnapshot(ITEM_ID, price, bid, SniperState.BIDDING));
 
 		assertThat(methodCalls, containsString("onChanged "));
 	}
+	
+	public void testNotifiesToListViewWhenSniperAdded() throws Exception {
+		assertEquals(0, adapter.getCount());
+		adapter.addSniper(SniperSnapshot.joining("item123"));
+		assertEquals(1, adapter.getCount());
+		
+		assertThat(methodCalls, containsString("onChanged "));
+	}
+	
+	public void testHoldsSniperInAdditionOrder() throws Exception {
+		adapter.addSniper(SniperSnapshot.joining("item 0"));
+		adapter.addSniper(SniperSnapshot.joining("item 1"));
+		
+		assertRowMatchesItemId(0, "item 0");
+		assertRowMatchesItemId(1, "item 1");
+	}
+	
+	public void testUpdateCorrectRowForSniper() throws Exception {
+		SniperSnapshot joining0 = SniperSnapshot.joining("item 0");
+		SniperSnapshot joining1 = SniperSnapshot.joining("item 1");
+		adapter.addSniper(joining0);
+		adapter.addSniper(joining1);
+		
+		SniperSnapshot bidding1 = joining1.bidding(1000, 1098);
+		adapter.sniperStateChanged(bidding1);
+		
+		assertRowMatchesSnapshot(0, joining0);
+		assertRowMatchesSnapshot(1, bidding1);
+	}
+
+	public void testThrowsExceptionIfNoExistingSniperForAnUpdate() throws Exception {
+		adapter.addSniper(SniperSnapshot.joining("item 0"));
+		try {
+			adapter.sniperStateChanged(SniperSnapshot.joining("notExistsItem"));
+			fail("throw exception if no existing sniper for an update");
+		} catch (IllegalStateException e) {
+			
+		}
+	}
+	private void assertRowMatchesSnapshot(int row, SniperSnapshot snapshot) {
+		assertEquals(snapshot, adapter.getItem(row));
+	}
+
+	private void assertRowMatchesItemId(int row, String itemId) {
+		View view = adapter.getView(row, null, parent);
+		SniperListAdapter.ViewHolder holder = (ViewHolder) view.getTag();
+
+		assertEquals(holder.itemId.getText(), itemId);
+	}
+	
 }

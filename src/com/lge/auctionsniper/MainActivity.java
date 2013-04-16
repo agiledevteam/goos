@@ -35,7 +35,6 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				final String [] itemIds = {"item-54321", "item-65432"};
-				adapter.sniperStateChanged(SniperSnapshot.joining(itemIds[0]));
 				// for now, we hard-coded the connection information
 				// this will be replaced with user input.
 				new Thread(new Runnable() {

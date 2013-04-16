@@ -1,5 +1,7 @@
 package com.lge.auctionsniper;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,22 +19,21 @@ public class SniperListAdapter extends BaseAdapter implements SniperListener {
 	}
 
 	private final Context context;
-	// for now, to avoid NPE
-	// it will replaced with array or list
-	private SniperSnapshot sniperState = new SniperSnapshot("", 0, 0, SniperState.JOINING);
 
+	private ArrayList<SniperSnapshot> snapshots = new ArrayList<SniperSnapshot>();
+	
 	public SniperListAdapter(Context context) {
 		this.context = context;
 	}
 
 	@Override
 	public int getCount() {
-		return 1;
+		return snapshots.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return null;
+		return snapshots.get(position);
 	}
 
 	@Override
@@ -53,6 +54,7 @@ public class SniperListAdapter extends BaseAdapter implements SniperListener {
 			holder.status = (TextView) convertView.findViewById(R.id.status_text);
 			convertView.setTag(holder);
 		}
+		SniperSnapshot sniperState = snapshots.get(position);
 		ViewHolder holder = (ViewHolder) convertView.getTag();
 		holder.itemId.setText(sniperState.itemId);
 		holder.lastPrice.setText(String.valueOf(sniperState.price));
@@ -80,12 +82,22 @@ public class SniperListAdapter extends BaseAdapter implements SniperListener {
 
 	@Override
 	public void sniperStateChanged(SniperSnapshot sniperState) {
-		this.sniperState = sniperState;
+		int row = rowMatches(sniperState);
+		snapshots.set(row, sniperState);
 		notifyDataSetChanged();
 	}
 
+	private int rowMatches(SniperSnapshot snapshot) {
+		for (int i = 0; i < snapshots.size(); i++) {
+			if (snapshot.isForSameItemAs(snapshots.get(i))) {
+				return i;
+			}
+		}
+		throw new IllegalStateException("row not matches with item id " + snapshot.itemId);
+	}
+
 	public void addSniper(SniperSnapshot snapshot) {
-		// TODO Auto-generated method stub
-		
+		snapshots.add(snapshot);
+		notifyDataSetChanged();
 	}
 }
