@@ -65,6 +65,9 @@ public class XmppServerTest extends TestCase {
 				} catch (XMPPException e) {
 					Log.d("xmppserver",
 							String.format("Exception :%s", e.getMessage()));
+				} catch (InterruptedException e) {
+					Log.d("xmppserver",
+							String.format("Exception :%s", e.getMessage()));
 				}
 			}
 		});
@@ -82,9 +85,14 @@ public class XmppServerTest extends TestCase {
 	}
 
 	private void login(XMPPConnection connection, String id, String password)
-			throws XMPPException {
+			throws XMPPException, InterruptedException {
 		connection.connect();
 		connection.login(id, password, AUCTION_RESOURCE);
+		waitForAWhile();
+	}
+
+	private void waitForAWhile() throws InterruptedException {
+		Thread.sleep(30);
 	}
 
 	@Override
@@ -112,12 +120,13 @@ public class XmppServerTest extends TestCase {
 			connection.disconnect();
 		}
 
-		public void login() throws XMPPException {
+		public void login() throws XMPPException, InterruptedException {
 			connection.connect();
 			connection.login(id, password, AUCTION_RESOURCE);
+			waitForAWhile();
 		}
 
-		public void createChat(String username) throws XMPPException {
+		public void createChat(String username) throws XMPPException, InterruptedException {
 			Chat chat = connection.getChatManager().createChat(username,
 					new MessageListener() {
 
@@ -134,6 +143,7 @@ public class XmppServerTest extends TestCase {
 					String.format("chat with %s created thread(%s):%s",
 							chat.getParticipant(), chat.getThreadID(),
 							chat.toString()));
+			waitForAWhile();
 		}
 	}
 
@@ -149,8 +159,9 @@ public class XmppServerTest extends TestCase {
 							chat.toString()));
 		}
 
-		public void sendMessage(String message) throws XMPPException {
+		public void sendMessage(String message) throws XMPPException, InterruptedException {
 			currentChat.sendMessage(message);
+			waitForAWhile();
 		}
 	}
 }
