@@ -77,7 +77,7 @@ public class AuctionSniperEndToEndTest extends
 		auction.hasReceivedBid(1098, ApplicationRunner.SNIPER_XMPP_ID);
 
 		auction2.reportPrice(500, 22, "other bidder");
-		application.hasShownSniperIsBidding(auction2, 500, 22); // last price, last bid
+		application.hasShownSniperIsBidding(auction2, 500, 522); // last price, last bid
 		auction2.hasReceivedBid(522, ApplicationRunner.SNIPER_XMPP_ID);
 		
 		auction.reportPrice(1098, 97, ApplicationRunner.SNIPER_XMPP_ID);
