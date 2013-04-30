@@ -43,7 +43,6 @@ public class FakeAuctionServer {
 				chat.addMessageListener(messageListener);
 			}
 		});
-		waitForAWhile();
 	}
 
 	public void reportPrice(int price, int increment, String bidder)
@@ -51,7 +50,6 @@ public class FakeAuctionServer {
 		currentChat.sendMessage(String.format("SOLVersion: 1.1; Event: PRICE; "
 				+ "CurrentPrice: %d; Increment: %d; Bidder: %s;", price,
 				increment, bidder));
-		waitForAWhile();
 	}
 
 	public void hasReceivedJoinRequestFrom(String sniperId)
@@ -74,7 +72,6 @@ public class FakeAuctionServer {
 
 	public void announceClosed() throws XMPPException, InterruptedException {
 		currentChat.sendMessage("SOLVersion: 1.1; Event: CLOSE;");
-		waitForAWhile();
 	}
 
 	public void stop() {
@@ -87,9 +84,5 @@ public class FakeAuctionServer {
 
 	public String getItemId() {
 		return itemId;
-	}
-	
-	private void waitForAWhile() throws InterruptedException {
-		Thread.sleep(30);
 	}
 }
