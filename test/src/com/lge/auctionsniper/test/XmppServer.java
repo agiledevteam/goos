@@ -20,6 +20,8 @@ public class XmppServer {
 				.retrieve(AccountManagement.class);
 		accountManagement.addUser(EntityImpl.parseUnchecked("auction-item-54321@localhost"),
 				"auction");
+		accountManagement.addUser(EntityImpl.parseUnchecked("auction-item-65432@localhost"),
+				"auction");
 		accountManagement.addUser(EntityImpl.parseUnchecked("sniper@localhost"),
 				"sniper");
 
