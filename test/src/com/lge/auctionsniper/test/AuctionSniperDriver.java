@@ -1,21 +1,19 @@
 package com.lge.auctionsniper.test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import android.app.Activity;
-
 import com.jayway.android.robotium.solo.Solo;
-import com.lge.android.wl.driver.AndroidDriver;
-import com.lge.android.wl.driver.TextViewDriver;
 import com.lge.auctionsniper.R;
+import com.lge.auctionsniper.test.util.TextViewAsserts;
 
-public class AuctionSniperDriver extends AndroidDriver<Activity> {
-	public AuctionSniperDriver(Solo solo, int timeout) {
-		super(solo, timeout);
+public class AuctionSniperDriver {
+	private Solo solo;
+
+	public AuctionSniperDriver(Solo solo) {
+		this.solo = solo;
 	}
 
 	public void showsSniperStatus(int resId) {
 		final String statusText = solo.getString(resId);
-		new TextViewDriver(this, R.id.sniper_status).hasText(equalTo(statusText));
+		new TextViewAsserts(solo, R.id.sniper_status).hasText(statusText);
 	}
 
 	public void clickJoinButton() {
