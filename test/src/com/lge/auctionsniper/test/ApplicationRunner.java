@@ -1,6 +1,7 @@
 package com.lge.auctionsniper.test;
 
 import com.jayway.android.robotium.solo.Solo;
+import com.lge.auctionsniper.R;
 
 public class ApplicationRunner {
 	public static final String SNIPER_XMPP_ID = "sniper@localhost";
