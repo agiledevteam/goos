@@ -9,8 +9,6 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
-import android.util.Log;
-
 public class FakeAuctionServer {
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
 	public static final String AUCTION_RESOURCE = "Auction";
@@ -53,5 +51,9 @@ public class FakeAuctionServer {
 
 	public void stop() {
 		// connection.disconnect();
+	}
+
+	public String getItemId() {
+		return itemId;
 	}
 }

@@ -2,14 +2,12 @@ package com.lge.auctionsniper.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.jayway.android.robotium.solo.Solo;
 import com.lge.auctionsniper.MainActivity;
 
 public class AuctionSniperEndToEndTest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
 	private FakeAuctionServer auction = new FakeAuctionServer("item-54321");
-	private ApplicationRunner application = new ApplicationRunner();
-	private Solo solo;
+	private ApplicationRunner application = new ApplicationRunner(this);
 
 	public AuctionSniperEndToEndTest() {
 		super(MainActivity.class);
@@ -18,12 +16,11 @@ public class AuctionSniperEndToEndTest extends
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		solo = new Solo(getInstrumentation(), getActivity());
 	}
 
 	public void testSniperJoinsAuctionUntilAuctionCloses() throws Exception {
 		auction.startSellingItem();
-		application.startBiddingIn(auction, solo);
+		application.startBiddingIn(auction);
 		auction.hasReceivedJoinRequestFromSniper();
 		auction.announceClosed();
 		application.showsSniperHasLostAuction();
